@@ -37,7 +37,6 @@ erl_crash.dump
 fly.md
 Notes.md
 data*
-test*
 # Static artifacts
 /node_modules
 /assets/node_modules
