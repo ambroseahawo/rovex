@@ -23,6 +23,35 @@ defmodule Rover.Web.Router do
     end
   end
 
+  post "/command" do
+    rover_name = conn.body_params["name"]
+    command = String.to_atom(conn.body_params["command"] |> String.upcase())
+
+    case command do
+      :F ->
+        Rover.go_forward(rover_name)
+        {:ok, {x, y, direction, name}} = Rover.get_state(rover_name)
+        state = %{x: x, y: y, direction: direction, name: name} # convert tuple to map
+        send_resp(conn, 200, Jason.encode!(%{message: state}))
+      :B ->
+        Rover.go_backward(rover_name)
+        {:ok, {x, y, direction, name}} = Rover.get_state(rover_name)
+        state = %{x: x, y: y, direction: direction, name: name} # convert tuple to map
+        send_resp(conn, 200, Jason.encode!(%{message: state}))
+      :L ->
+        Rover.rotate_left(rover_name)
+        {:ok, {x, y, direction, name}} = Rover.get_state(rover_name)
+        state = %{x: x, y: y, direction: direction, name: name} # convert tuple to map
+        send_resp(conn, 200, Jason.encode!(%{message: state}))
+      :R ->
+        Rover.rotate_right(rover_name)
+        {:ok, {x, y, direction, name}} = Rover.get_state(rover_name)
+        state = %{x: x, y: y, direction: direction, name: name} # convert tuple to map
+        send_resp(conn, 200, Jason.encode!(%{message: state}))
+      _ -> send_resp(conn, 500, Jason.encode!(%{message: "generic error"}))
+    end
+  end
+
   match(_) do
     send_resp(conn, 404, "")
   end
