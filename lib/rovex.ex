@@ -37,6 +37,10 @@ defmodule Rover do
     GenServer.cast(RegistryHelper.create_key(name), :rotate_left)
   end
 
+  def rotate_right(name) do
+    GenServer.cast(RegistryHelper.create_key(name), :rotate_right)
+  end
+
   def handle_cast(:go_forward, state) do
     new_state =
       case state.direction do
@@ -68,6 +72,18 @@ defmodule Rover do
         :S -> %Rover{state | direction: :E}
         :E -> %Rover{state | direction: :N}
         :W -> %Rover{state | direction: :S}
+      end
+
+    {:noreply, new_state}
+  end
+
+  def handle_cast(:rotate_right, state) do
+    new_state =
+      case state.direction do
+        :N -> %Rover{state | direction: :E}
+        :S -> %Rover{state | direction: :W}
+        :E -> %Rover{state | direction: :S}
+        :W -> %Rover{state | direction: :N}
       end
 
     {:noreply, new_state}

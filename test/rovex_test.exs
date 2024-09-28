@@ -28,4 +28,11 @@ defmodule RoverTest do
     assert state.y == 3
     assert state.direction == :W
   end
+
+  test "handle_cast :rotate_right should return updated state (N)" do
+    {:noreply, state} = Rover.handle_cast(:rotate_right, %Rover{x: 1, y: 3, direction: :N})
+    assert state.x == 1
+    assert state.y == 3
+    assert state.direction == :E
+  end
 end
